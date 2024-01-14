@@ -26,7 +26,7 @@ in
 
       configFile = mkOption {
         type = types.path;
-        default = "${cfg.dataDir}/sabnzbd.ini";
+        default = "/var/lib/sabnzbd/sabnzbd.ini";
         description = lib.mdDoc "Path to config file.";
       };
 
@@ -67,7 +67,6 @@ in
         uid = config.ids.uids.sabnzbd;
         group = cfg.group;
         description = "sabnzbd user";
-        home = cfg.dataDir;
       };
     };
 
