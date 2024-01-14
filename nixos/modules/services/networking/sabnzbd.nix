@@ -42,12 +42,10 @@ in
         description = lib.mdDoc "Group to run the service as";
       };
 
-      dataDir = mkOption {
+      stateDirectoryMode = mkOption {
         type = types.str;
-        default = "/var/lib/sabnzbd";
-        description = lib.mdDoc ''
-          The directory where sabnzbd stores its data files.
-        '';
+        default = "0700";
+        description = lib.mdDoc "Directory mode for /var/lib/sabnzbd";
       };
 
       openFirewall = mkOption {
@@ -86,22 +84,8 @@ in
           GuessMainPID = "no";
           User = cfg.user;
           Group = cfg.group;
-
-          # Run the pre-start script with full permissions (the "!" prefix) so it
-          # can create the data directory if necessary.
-          ExecStartPre = let
-            preStartScript = pkgs.writeScript "sabnzbd-run-prestart" ''
-              #!${pkgs.bash}/bin/bash
-
-              # Create data directory if it doesn't exist
-              if ! test -d "${cfg.dataDir}"; then
-                echo "Creating initial sabnzbd data directory in: ${cfg.dataDir}"
-                install -d -m 0700 -o "${cfg.user}" -g "${cfg.group}" "${cfg.dataDir}"
-              fi
-            '';
-          in
-            "!${preStartScript}";
-
+          StateDirectory = "sabnzbd";
+          StateDirectoryMode = cfg.stateDirectoryMode;
           ExecStart = "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile}";
         };
     };
