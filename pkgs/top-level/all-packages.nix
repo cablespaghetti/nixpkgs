@@ -284,10 +284,6 @@ with pkgs;
 
   _0x =  callPackage ../tools/misc/0x { };
 
-  atuin = callPackage ../tools/misc/atuin {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security SystemConfiguration;
-  };
-
   automatic-timezoned = callPackage ../tools/system/automatic-timezoned { };
 
   cve = with python3Packages; toPythonApplication cvelib;
@@ -1021,7 +1017,7 @@ with pkgs;
 
   fetchpijul = callPackage ../build-support/fetchpijul { };
 
-  inherit (callPackage ../build-support/node/fetch-yarn-deps { })
+  inherit (callPackages ../build-support/node/fetch-yarn-deps { })
     prefetch-yarn-deps
     fetchYarnDeps;
 
@@ -1886,7 +1882,7 @@ with pkgs;
 
   immich-cli = callPackage ../tools/misc/immich-cli { };
 
-  inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
+  inherit (callPackages ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
   jobber = callPackage ../tools/system/jobber { };
 
@@ -2953,8 +2949,6 @@ with pkgs;
 
   felix-fm = callPackage ../applications/file-managers/felix-fm { };
 
-  joshuto = callPackage ../applications/file-managers/joshuto { };
-
   krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
 
   lesscpy = callPackage ../development/compilers/lesscpy { };
@@ -3596,8 +3590,8 @@ with pkgs;
   bucklespring-libinput = callPackage ../applications/audio/bucklespring { };
   bucklespring-x11 = callPackage ../applications/audio/bucklespring { legacy = true; };
 
-  inherit (python3.pkgs.callPackage ../development/tools/continuous-integration/buildbot {})
-    buildbot buildbot-ui buildbot-full buildbot-plugins buildbot-worker;
+  buildbotPackages = recurseIntoAttrs (python3.pkgs.callPackage ../development/tools/continuous-integration/buildbot { });
+  inherit (buildbotPackages) buildbot buildbot-ui buildbot-full buildbot-plugins buildbot-worker;
 
   bunyan-rs = callPackage ../development/tools/bunyan-rs { };
 
@@ -4382,7 +4376,7 @@ with pkgs;
   buttercup-desktop = callPackage ../tools/security/buttercup-desktop { };
 
   charles = charles4;
-  inherit (callPackage ../applications/networking/charles {})
+  inherit (callPackages ../applications/networking/charles {})
     charles3
     charles4
   ;
@@ -4754,7 +4748,7 @@ with pkgs;
 
   copyright-update = callPackage ../tools/text/copyright-update { };
 
-  inherit (callPackage ../tools/misc/coreboot-utils { })
+  inherit (callPackages ../tools/misc/coreboot-utils { })
     msrtool
     cbmem
     ifdtool
@@ -8489,7 +8483,7 @@ with pkgs;
 
   gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
 
-  inherit (callPackage ../tools/filesystems/garage {
+  inherit (callPackages ../tools/filesystems/garage {
     inherit (darwin.apple_sdk.frameworks) Security;
   })
     garage
@@ -11216,7 +11210,7 @@ with pkgs;
 
   grocy = callPackage ../servers/grocy { };
 
-  inherit (callPackage ../servers/nextcloud {})
+  inherit (callPackages ../servers/nextcloud {})
     nextcloud25 nextcloud26 nextcloud27 nextcloud28;
 
   nextcloud25Packages = throw "Nextcloud25 is EOL!";
@@ -11252,7 +11246,7 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  inherit (callPackage ../applications/networking/cluster/nomad { })
+  inherit (callPackages ../applications/networking/cluster/nomad { })
     nomad
     nomad_1_4
     nomad_1_5
@@ -30938,8 +30932,6 @@ with pkgs;
   };
 
   bookworm = callPackage ../applications/office/bookworm { };
-
-  bookletimposer = callPackage ../applications/office/bookletimposer { };
 
   boops = callPackage ../applications/audio/boops { };
 
